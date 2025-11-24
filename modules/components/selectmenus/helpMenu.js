@@ -82,6 +82,39 @@ module.exports = {
                 },
                 color: 0x5865F2
             });
+        } else if (value === 'owner') {
+            const isOwner = client.permissionHandler.isOwner(interaction.user.id);
+            
+            embed = embedBuilder.create({
+                title: `👑 ${client.config.bot.name} - Owner Commands`,
+                description: isOwner 
+                    ? '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\nExclusive commands for bot owners:'
+                    : '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n⚠️ You are not a bot owner!',
+                fields: [
+                    {
+                        name: '💻 /eval',
+                        value: isOwner 
+                            ? '```Execute JavaScript code for debugging```\n> ⚠️ **DISABLED by default** for security\n> Set `ENABLE_EVAL=true` to enable (NOT recommended for production)'
+                            : '```Execute JavaScript code for debugging```\n> 🔒 Owner-only command',
+                        inline: false
+                    },
+                    {
+                        name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n🛡️ Security',
+                        value: isOwner
+                            ? '> Eval is **disabled by default** to prevent remote code execution\n> Only enable in **controlled, trusted environments**\n> Never enable in **production deployments**'
+                            : '> These commands are restricted to bot owners only\n> Configure owner IDs in `.env` file',
+                        inline: false
+                    }
+                ],
+                thumbnail: client.user.displayAvatarURL({ size: 1024 }),
+                footer: { 
+                    text: isOwner 
+                        ? `⚠️ Use with extreme caution • ${client.config.bot.version}`
+                        : `Contact ${client.config.bot.owner} for access`,
+                    iconURL: client.user.displayAvatarURL()
+                },
+                color: isOwner ? 0xFEE75C : 0xED4245
+            });
         } else if (value === 'features') {
             embed = embedBuilder.create({
                 title: `⚡ ${client.config.bot.name} - Features`,

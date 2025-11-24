@@ -24,6 +24,11 @@ module.exports = {
                     inline: false
                 },
                 {
+                    name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n👑 Owner Commands',
+                    value: '```\n/eval      - Execute code (DISABLED by default)\n```\n> *Only bot owners can use these commands*',
+                    inline: false
+                },
+                {
                     name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n📝 Multiple Ways to Use Commands',
                     value: `> **Slash Commands:** \`/ping\`\n> **Prefix Commands:** \`${client.config.bot.prefix}ping\`\n> **@Mention Commands:** \`@${client.user.username} ping\`\n> **Just Mention:** \`@${client.user.username}\` (for help)`,
                     inline: false
@@ -60,6 +65,12 @@ module.exports = {
                             description: 'View all utility commands',
                             value: 'utility',
                             emoji: '🛠️'
+                        },
+                        {
+                            label: 'Owner Commands',
+                            description: 'Bot owner exclusive commands',
+                            value: 'owner',
+                            emoji: '👑'
                         },
                         {
                             label: 'Bot Information',
