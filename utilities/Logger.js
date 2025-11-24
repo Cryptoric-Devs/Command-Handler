@@ -60,9 +60,10 @@ class Logger {
                 console.log(createRow('🔀', 'Sharding', 'Hybrid-Sharding', '#FEE75C'));
                 console.log(createRow('🌐', 'Total Shards', totalShards.toString(), '#99AAB5'));
                 console.log(bottomBorder);
-                console.log('\n');
+                console.log('');
                 
-                resolve();
+                // Use setImmediate to ensure all console logs complete before resolving
+                setImmediate(() => resolve());
             });
         });
     }

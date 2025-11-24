@@ -33,35 +33,60 @@ module.exports = {
             });
         }
         
-        const embed = embedBuilder.create({
-            title: `📚 ${client.config.bot.name} - Help Center`,
-            description: `Welcome to **${client.config.bot.name}**! Your powerful Discord bot with full component support.\n\n**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**`,
-            fields: [
-                ...fields,
-                {
-                    name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n📝 Multiple Ways to Use Commands',
-                    value: `> **Slash Commands:** \`/ping\`\n> **Prefix Commands:** \`${client.config.bot.prefix}ping\`\n> **@Mention Commands:** \`@${client.user.username} ping\`\n> **Just Mention:** \`@${client.user.username}\` (for help)`,
-                    inline: false
-                },
-                {
-                    name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n⚡ Bot Features',
-                    value: '```diff\n+ Discord.js v14\n+ Slash Commands\n+ Prefix Commands  \n+ @Mention Support\n+ Component v2 Handler\n+ Discord Hybrid Sharding\n+ Colorful Logging\n```',
-                    inline: false
-                },
-                {
-                    name: '**━━━━━━━━━━━━━━━━━━━━━━━━━━━━**\n📊 Statistics',
-                    value: `\`\`\`yml\nServers: ${client.guilds.cache.size}\nUsers: ${client.users.cache.size}\nChannels: ${client.channels.cache.size}\nCluster: ${client.cluster?.id || 0}\nShards: ${client.cluster?.count || 1}\`\`\``,
-                    inline: false
-                }
-            ],
-            footer: { 
-                text: `Made by ${client.config.bot.owner} • ${client.config.bot.version}`,
-                iconURL: client.user.displayAvatarURL()
-            },
-            thumbnail: client.user.displayAvatarURL({ size: 1024 }),
-            color: 0x5865F2
-        });
-
+        const { ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, SectionBuilder, ThumbnailBuilder, MessageFlags } = require('discord.js');
+        
+        const container = new ContainerBuilder();
+        
+        // Title
+        const title = new TextDisplayBuilder()
+            .setContent(`## 📚 ${client.config.bot.name} - Help Center`);
+        container.addTextDisplayComponents(title);
+        
+        container.addSeparatorComponents(new SeparatorBuilder());
+        
+        // Description with thumbnail
+        const descSection = new SectionBuilder();
+        const desc = new TextDisplayBuilder()
+            .setContent(`Welcome to **${client.config.bot.name}**! Your powerful Discord bot with full Component v2 support.`);
+        descSection.addTextDisplayComponents(desc);
+        
+        const thumbnail = new ThumbnailBuilder({ media: { url: client.user.displayAvatarURL({ size: 1024 }) } });
+        descSection.setThumbnailAccessory(thumbnail);
+        container.addSectionComponents(descSection);
+        
+        // Commands section
+        let commandsList = '**🛠️ Utility Commands**\n' +
+            '> `/ping` - Check bot latency\n' +
+            '> `/help` - Show this menu\n' +
+            '> `/button` - Test button components\n' +
+            '> `/shard` - View shard information\n\n';
+        
+        if (isOwner) {
+            commandsList += '**👑 Owner Commands**\n' +
+                '> `/eval` - Execute code (DISABLED by default)\n' +
+                '> ⚠️ Use with extreme caution\n\n';
+        }
+        
+        commandsList += `**📝 Multiple Ways to Use Commands**\n` +
+            `> **Slash:** \`/ping\` | **Prefix:** \`${client.config.bot.prefix}ping\`\n` +
+            `> **@Mention:** \`@${client.user.username} ping\`\n\n` +
+            `**⚡ Bot Features**\n` +
+            `> Discord.js v14 • Component v2 Handler\n` +
+            `> Slash Commands • Prefix Commands\n` +
+            `> @Mention Support • Hybrid Sharding\n\n` +
+            `**📊 Statistics**\n` +
+            `> Servers: \`${client.guilds.cache.size}\` | Users: \`${client.users.cache.size}\`\n` +
+            `> Channels: \`${client.channels.cache.size}\` | Shard: \`${client.cluster?.id || 0}/${client.cluster?.count || 1}\``;
+        
+        const commandsText = new TextDisplayBuilder().setContent(commandsList);
+        container.addTextDisplayComponents(commandsText);
+        
+        container.addSeparatorComponents(new SeparatorBuilder());
+        
+        const footer = new TextDisplayBuilder()
+            .setContent(`> Made by ${client.config.bot.owner} • Version ${client.config.bot.version}`);
+        container.addTextDisplayComponents(footer);
+        
         // Build dropdown options - only include owner category for owners
         const dropdownOptions = [
             {
@@ -125,10 +150,14 @@ module.exports = {
                     .setEmoji('🔄')
             );
 
+        // Add action rows to container
+        container.addActionRowComponents(selectRow);
+        container.addActionRowComponents(buttonRow);
+
         if (isSlash) {
-            await interactionOrMessage.reply({ embeds: [embed], components: [selectRow, buttonRow] });
+            await interactionOrMessage.reply({ components: [container], flags: MessageFlags.IsComponentsV2 });
         } else {
-            await interactionOrMessage.reply({ embeds: [embed], components: [selectRow, buttonRow] });
+            await interactionOrMessage.reply({ components: [container], flags: MessageFlags.IsComponentsV2 });
         }
     }
 };

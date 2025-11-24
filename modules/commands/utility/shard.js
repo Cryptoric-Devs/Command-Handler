@@ -58,19 +58,17 @@ module.exports = {
             const totalUsers = client.users.cache.size;
             const totalChannels = client.channels.cache.size;
 
-            const embed = embedBuilder.create({
+            const response = embedBuilder.create({
                 title: '🔧 Shard Information',
                 description: `**Total Shards:** \`${totalShards}\`\n**Current Shard:** \`${currentShard}\`\n\n${shardStats}`,
                 fields: [
                     {
                         name: '📊 Overall Statistics',
-                        value: `Guilds: \`${totalGuilds}\` | Users: \`${totalUsers}\` | Channels: \`${totalChannels}\``,
-                        inline: false
+                        value: `Guilds: \`${totalGuilds}\` | Users: \`${totalUsers}\` | Channels: \`${totalChannels}\``
                     },
                     {
                         name: '⚙️ Bot Information',
-                        value: `Version: \`2.0.0\`\nNode: \`${process.version}\`\nDiscord.js: \`v14\``,
-                        inline: false
+                        value: `Version: \`1.0.0\`\nNode: \`${process.version}\`\nDiscord.js: \`v14\``
                     }
                 ],
                 footer: { text: `Npg Bot • Cluster ${currentShard}/${totalShards - 1}` },
@@ -78,18 +76,18 @@ module.exports = {
             });
 
             if (isSlash) {
-                await interactionOrMessage.reply({ embeds: [embed] });
+                await interactionOrMessage.reply(response);
             } else {
-                await interactionOrMessage.reply({ embeds: [embed] });
+                await interactionOrMessage.reply(response);
             }
         } catch (error) {
             client.logger.error('Error in shard command:', error);
-            const errorEmbed = embedBuilder.error('Failed to fetch shard information. Please try again.');
+            const errorResponse = embedBuilder.error('Failed to fetch shard information. Please try again.');
             
             if (isSlash) {
-                await interactionOrMessage.reply({ embeds: [errorEmbed], ephemeral: true });
+                await interactionOrMessage.reply({ ...errorResponse, ephemeral: true });
             } else {
-                await interactionOrMessage.reply({ embeds: [errorEmbed] });
+                await interactionOrMessage.reply(errorResponse);
             }
         }
     }
