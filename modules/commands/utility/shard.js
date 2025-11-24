@@ -10,8 +10,9 @@ module.exports = {
     description: 'View shard information',
     aliases: ['shards', 'shardinfo', 'cluster'],
     
-    async execute(interaction, client) {
-        const isSlash = interaction.isChatInputCommand?.();
+    async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
+        const isSlash = interactionOrMessage.isChatInputCommand?.();
+        const client = isSlash ? argsOrClient : clientOrUndefined;
         
         try {
             const clusterInfo = client.cluster;
@@ -77,18 +78,18 @@ module.exports = {
             });
 
             if (isSlash) {
-                await interaction.reply({ embeds: [embed] });
+                await interactionOrMessage.reply({ embeds: [embed] });
             } else {
-                await interaction.reply({ embeds: [embed] });
+                await interactionOrMessage.reply({ embeds: [embed] });
             }
         } catch (error) {
             client.logger.error('Error in shard command:', error);
             const errorEmbed = embedBuilder.error('Failed to fetch shard information. Please try again.');
             
             if (isSlash) {
-                await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                await interactionOrMessage.reply({ embeds: [errorEmbed], ephemeral: true });
             } else {
-                await interaction.reply({ embeds: [errorEmbed] });
+                await interactionOrMessage.reply({ embeds: [errorEmbed] });
             }
         }
     }

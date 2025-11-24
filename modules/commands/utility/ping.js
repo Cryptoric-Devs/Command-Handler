@@ -10,8 +10,9 @@ module.exports = {
     description: 'Check the bot latency',
     aliases: ['pong', 'latency'],
     
-    async execute(interaction, client) {
-        const isSlash = interaction.isChatInputCommand?.();
+    async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
+        const isSlash = interactionOrMessage.isChatInputCommand?.();
+        const client = isSlash ? argsOrClient : clientOrUndefined;
         
         const embed = embedBuilder.create({
             title: '🏓 Pong!',
@@ -36,8 +37,8 @@ module.exports = {
         });
 
         if (isSlash) {
-            const sent = await interaction.reply({ embeds: [embed], fetchReply: true });
-            const roundtrip = sent.createdTimestamp - interaction.createdTimestamp;
+            const sent = await interactionOrMessage.reply({ embeds: [embed], fetchReply: true });
+            const roundtrip = sent.createdTimestamp - interactionOrMessage.createdTimestamp;
             
             embed.addFields({
                 name: 'Roundtrip Latency',
@@ -45,10 +46,10 @@ module.exports = {
                 inline: true
             });
             
-            await interaction.editReply({ embeds: [embed] });
+            await interactionOrMessage.editReply({ embeds: [embed] });
         } else {
-            const sent = await interaction.reply({ embeds: [embed] });
-            const roundtrip = sent.createdTimestamp - interaction.createdTimestamp;
+            const sent = await interactionOrMessage.reply({ embeds: [embed] });
+            const roundtrip = sent.createdTimestamp - interactionOrMessage.createdTimestamp;
             
             embed.addFields({
                 name: 'Roundtrip Latency',

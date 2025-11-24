@@ -4,8 +4,17 @@ module.exports = {
     customId: 'test_button',
     
     async execute(interaction, client) {
-        const buttonId = interaction.customId;
+        const originalUser = interaction.message.interaction?.user?.id || interaction.message.author?.id;
         
+        if (originalUser && interaction.user.id !== originalUser) {
+            const embed = embedBuilder.error(
+                `Sorry, this button is not for you! Only <@${originalUser}> can use these buttons.`,
+                'Access Denied'
+            );
+            return interaction.reply({ embeds: [embed], ephemeral: true });
+        }
+        
+        const buttonId = interaction.customId;
         let embed;
         
         if (buttonId.includes('success')) {

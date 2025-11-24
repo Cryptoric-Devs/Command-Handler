@@ -2,6 +2,9 @@ require('dotenv').config();
 
 module.exports = {
     bot: {
+        name: process.env.BOT_NAME || 'Npg',
+        owner: process.env.OWNER_NAME || 'Npg',
+        version: '2.0.0',
         token: process.env.DISCORD_TOKEN,
         clientId: process.env.CLIENT_ID,
         prefix: process.env.PREFIX || '!',

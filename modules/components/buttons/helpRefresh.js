@@ -1,18 +1,19 @@
-const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const embedBuilder = require('../../../utilities/EmbedBuilder');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('help')
-        .setDescription('View all available commands and information about the bot'),
+    customId: 'help_refresh',
     
-    name: 'help',
-    description: 'View all available commands',
-    aliases: ['commands', 'h'],
-    
-    async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
-        const isSlash = interactionOrMessage.isChatInputCommand?.();
-        const client = isSlash ? argsOrClient : clientOrUndefined;
+    async execute(interaction, client) {
+        const originalUser = interaction.message.interaction?.user?.id || interaction.message.author?.id;
+        
+        if (originalUser && interaction.user.id !== originalUser) {
+            const embed = embedBuilder.error(
+                `This help menu belongs to <@${originalUser}>. Use \`/help\` to get your own!`,
+                'Not Your Menu'
+            );
+            return interaction.reply({ embeds: [embed], ephemeral: true });
+        }
         
         const embed = embedBuilder.create({
             title: `📚 ${client.config.bot.name} - Help Center`,
@@ -95,10 +96,6 @@ module.exports = {
                     .setEmoji('🔄')
             );
 
-        if (isSlash) {
-            await interactionOrMessage.reply({ embeds: [embed], components: [selectRow, buttonRow] });
-        } else {
-            await interactionOrMessage.reply({ embeds: [embed], components: [selectRow, buttonRow] });
-        }
+        await interaction.update({ embeds: [embed], components: [selectRow, buttonRow] });
     }
 };

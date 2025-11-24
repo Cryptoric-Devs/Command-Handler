@@ -15,21 +15,31 @@ class Logger {
         };
     }
 
-    async printBanner() {
+    async printBanner(config) {
         return new Promise((resolve) => {
-            ascii.font('Npg', 'Doom', (err, rendered) => {
+            const botName = config?.bot?.name || 'Npg';
+            const ownerName = config?.bot?.owner || 'Npg';
+            const version = config?.bot?.version || '2.0.0';
+            
+            ascii.font(botName, 'Doom', (err, rendered) => {
                 if (err) {
                     console.log(chalk.bold.cyan('='.repeat(60)));
-                    console.log(chalk.bold.cyan('NPG DISCORD BOT'));
+                    console.log(chalk.bold.cyan(`${botName.toUpperCase()} DISCORD BOT`));
+                    console.log(chalk.bold.cyan('='.repeat(60)));
+                    console.log(chalk.cyan(`  Bot Name:    ${chalk.white.bold(botName)}`));
+                    console.log(chalk.cyan(`  Owner:       ${chalk.white.bold(ownerName)}`));
+                    console.log(chalk.cyan(`  Version:     ${chalk.white.bold(version)}`));
+                    console.log(chalk.cyan(`  Framework:   ${chalk.white.bold('Discord.js v14')}`));
+                    console.log(chalk.cyan(`  Sharding:    ${chalk.white.bold('Discord-Hybrid-Sharding')}`));
                     console.log(chalk.bold.cyan('='.repeat(60)));
                     return resolve();
                 }
                 
                 console.log(chalk.bold.cyan(rendered));
                 console.log(chalk.bold.cyan('='.repeat(60)));
-                console.log(chalk.cyan(`  Bot Name:    ${chalk.white.bold('Npg')}`));
-                console.log(chalk.cyan(`  Owner:       ${chalk.white.bold('Npg')}`));
-                console.log(chalk.cyan(`  Version:     ${chalk.white.bold('2.0.0')}`));
+                console.log(chalk.cyan(`  Bot Name:    ${chalk.white.bold(botName)}`));
+                console.log(chalk.cyan(`  Owner:       ${chalk.white.bold(ownerName)}`));
+                console.log(chalk.cyan(`  Version:     ${chalk.white.bold(version)}`));
                 console.log(chalk.cyan(`  Framework:   ${chalk.white.bold('Discord.js v14')}`));
                 console.log(chalk.cyan(`  Sharding:    ${chalk.white.bold('Discord-Hybrid-Sharding')}`));
                 console.log(chalk.bold.cyan('='.repeat(60)));

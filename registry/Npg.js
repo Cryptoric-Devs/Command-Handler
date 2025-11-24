@@ -30,7 +30,8 @@ class NpgRegistry {
 
     async deployCommands(token, clientId, guildId = null) {
         try {
-            await logger.printBanner();
+            const config = require('../config');
+            await logger.printBanner(config);
             
             logger.info('Loading commands for deployment...');
             this.commands = [];

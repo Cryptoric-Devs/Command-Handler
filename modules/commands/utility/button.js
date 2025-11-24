@@ -10,8 +10,8 @@ module.exports = {
     description: 'Test button components',
     aliases: ['btn', 'test'],
     
-    async execute(interaction, client) {
-        const isSlash = interaction.isChatInputCommand?.();
+    async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
+        const isSlash = interactionOrMessage.isChatInputCommand?.();
         
         const embed = embedBuilder.create({
             title: '🔘 Button Component Test',
@@ -44,9 +44,9 @@ module.exports = {
             );
 
         if (isSlash) {
-            await interaction.reply({ embeds: [embed], components: [row] });
+            await interactionOrMessage.reply({ embeds: [embed], components: [row] });
         } else {
-            await interaction.reply({ embeds: [embed], components: [row] });
+            await interactionOrMessage.reply({ embeds: [embed], components: [row] });
         }
     }
 };

@@ -100,6 +100,161 @@ Mention the bot followed by the command:
 Simply mention the bot to see the prefix and usage info:
 - `@Npg` - Shows helpful information about the bot
 
+## 📖 How to Add Your Own Commands
+
+Want to add your own commands? It's super easy! Follow these examples below.
+
+### Creating a Slash Command
+
+1. Create a new file in `modules/commands/` (pick a category like `utility`, `fun`, `moderation`, etc.)
+2. Here's a basic template:
+
+```js
+const { SlashCommandBuilder } = require('discord.js');
+const embedBuilder = require('../../../utilities/EmbedBuilder');
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('hello')
+        .setDescription('Say hello to someone')
+        .addStringOption(option =>
+            option.setName('name')
+                .setDescription('Who to greet')
+                .setRequired(false)),
+    
+    async execute(interaction, client) {
+        const name = interaction.options.getString('name') || interaction.user.username;
+        const embed = embedBuilder.success(`Hello, ${name}! 👋`);
+        await interaction.reply({ embeds: [embed] });
+    }
+};
+```
+
+That's it! Restart the bot and your command will work automatically.
+
+### Creating a Prefix Command
+
+Want to make a command that works with `!command`? Easy!
+
+```js
+module.exports = {
+    name: 'greet',
+    description: 'Greet someone',
+    aliases: ['hello', 'hi'],
+    
+    async execute(message, args, client) {
+        const name = args[0] || message.author.username;
+        await message.reply(`Hello, ${name}! 👋`);
+    }
+};
+```
+
+Now you can use: `!greet John` or `@Npg greet John`
+
+### Creating a Command That Works Both Ways (Slash + Prefix)
+
+The best part? You can make commands work with BOTH slash and prefix!
+
+```js
+const { SlashCommandBuilder } = require('discord.js');
+
+module.exports {
+    // Slash command config
+    data: new SlashCommandBuilder()
+        .setName('avatar')
+        .setDescription('Get user avatar')
+        .addUserOption(option =>
+            option.setName('user')
+                .setDescription('The user')
+                .setRequired(false)),
+    
+    // Prefix command config
+    name: 'avatar',
+    description: 'Get user avatar',
+    aliases: ['av', 'pfp'],
+    
+    // Works for BOTH slash and prefix!
+    async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
+        const isSlash = interactionOrMessage.isChatInputCommand?.();
+        const client = isSlash ? argsOrClient : clientOrUndefined;
+        
+        let user;
+        if (isSlash) {
+            user = interactionOrMessage.options.getUser('user') || interactionOrMessage.user;
+        } else {
+            user = interactionOrMessage.mentions.users.first() || interactionOrMessage.author;
+        }
+        
+        await interactionOrMessage.reply({
+            content: `${user.username}'s avatar:`,
+            files: [user.displayAvatarURL({ size: 1024 })]
+        });
+    }
+};
+```
+
+Now it works with `/avatar`, `!avatar`, and `@Npg avatar`!
+
+### Adding Buttons to Your Command
+
+```js
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('vote')
+        .setDescription('Create a vote'),
+    
+    name: 'vote',
+    
+    async execute(interactionOrMessage) {
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('vote_yes')
+                    .setLabel('Yes')
+                    .setStyle(ButtonStyle.Success)
+                    .setEmoji('✅'),
+                new ButtonBuilder()
+                    .setCustomId('vote_no')
+                    .setLabel('No')
+                    .setStyle(ButtonStyle.Danger)
+                    .setEmoji('❌')
+            );
+
+        await interactionOrMessage.reply({
+            content: 'Vote now!',
+            components: [row]
+        });
+    }
+};
+```
+
+Then create the button handler in `modules/components/buttons/`:
+
+```js
+module.exports = {
+    customId: 'vote',
+    
+    async execute(interaction, client) {
+        if (interaction.customId === 'vote_yes') {
+            await interaction.reply({ content: 'You voted Yes!', ephemeral: true });
+        } else {
+            await interaction.reply({ content: 'You voted No!', ephemeral: true });
+        }
+    }
+};
+```
+
+### Quick Tips
+
+- File names don't matter, but use lowercase and meaningful names like `kick.js`, `userinfo.js`
+- Put commands in categories: `utility/`, `moderation/`, `fun/`, etc.
+- The bot auto-loads everything from `modules/commands/`
+- Restart the bot after adding new commands
+- Commands deploy automatically when the bot starts
+- Use `embedBuilder` for nice looking messages (it's imported in examples)
+
 ## 🎨 Component v2 Handler
 
 The bot includes a complete component v2 handler supporting:

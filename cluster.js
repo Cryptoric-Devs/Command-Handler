@@ -3,7 +3,7 @@ const logger = require('./utilities/Logger');
 const config = require('./config');
 
 async function startClusters() {
-    await logger.printBanner();
+    await logger.printBanner(config);
 
     const manager = new ClusterManager('./core/bot.js', {
         totalShards: config.sharding.totalShards,
