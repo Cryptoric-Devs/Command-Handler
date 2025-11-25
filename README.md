@@ -28,6 +28,7 @@ npg-discord-bot/
 ├── modules/
 │   ├── commands/             # Slash & prefix commands
 │   │   └── utility/
+        └── owner/
 │   ├── components/           # Component v2
 │   │   ├── buttons/
 │   │   ├── selectmenus/
