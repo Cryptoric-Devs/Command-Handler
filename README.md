@@ -1,191 +1,193 @@
-# Npg Discord Bot
+# 🛡️ Cryptoric Discord Handler
 
-A professional Discord bot built with **Discord.js v14**, featuring **Component v2 Handler** and **Discord-Hybrid-Sharding** for scalability.
+<div align="center">
+
+[![Discord.js](https://img.shields.io/badge/Discord.js-v14-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-v16.9%2B-green?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Sharding](https://img.shields.io/badge/Hybrid-Sharding-orange?style=for-the-badge)](https://github.com/vladfrangu/discord-hybrid-sharding)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+
+**A professional, enterprise-grade Discord bot boilerplate built for scalability.**
+Featuring Discord.js v14, Hybrid Sharding, Component v2 Handling, and a robust hybrid command system.
+
+[Features](#-features) • [Installation](#-setup) • [Documentation](#--how-to-add-your-own-commands) • [Authors](#-authors) • [Support](https://discord.gg/7f8hXtdQkq)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+1. [Features](#-features)
+2. [Project Structure](#-project-structure)
+3. [Setup](#-setup)
+4. [Configuration](#-configuration)
+5. [Usage Guide](#-commands)
+6. [Development Guide](#--how-to-add-your-own-commands)
+7. [Authors](#-authors)
+
+---
 
 ## ✨ Features
 
-- 🚀 **Discord.js v14** - Latest version with full support
-- 🔄 **Discord-Hybrid-Sharding** - Automated sharding from the start
-- 🎯 **Component v2 Handler** - Buttons, Select Menus, Modals
-- ⚡ **Slash Commands** - Full slash command support
-- 📝 **Prefix Commands** - Traditional prefix commands with aliases
-- 🏷️ **@Mention Commands** - Use commands by mentioning the bot
-- 🎨 **Colorful ASCII Logging** - Beautiful console output with cluster info
-- 📁 **Unique File Structure** - Organized and maintainable codebase
+* 🚀 **Discord.js v14 Core:** Built on the latest library version taking full advantage of modern Discord features.
+* 🔄 **Discord-Hybrid-Sharding:** Automated, enterprise-level sharding implementation for massive scalability across multiple clusters.
+* 🎯 **Advanced Component Handler:** Modular handling for Buttons, Select Menus, and Modals (Component v2).
+* ⚡ **Hybrid Command System:** Support for Slash Commands, Prefix Commands, and Mention Commands simultaneously.
+* 🎨 **Rich Logging:** Beautiful, colorful ASCII console output with detailed cluster and shard information.
+* 📁 **Modular Architecture:** A clean, organized, and maintainable file structure designed for team collaboration.
+
+---
 
 ## 📁 Project Structure
 
-```
-npg-discord-bot/
-├── cluster.js                 # Main entry point (cluster manager)
+```text
+cryptoric-discord-bot/
+├── cluster.js                # 🚀 Main entry point (Cluster Manager)
 ├── core/
-│   ├── bot.js                # Bot initialization
-│   └── Client.js             # Extended Discord client
+│   ├── bot.js                # Bot initialization logic
+│   └── Client.js             # Extended Discord Client class
 ├── handlers/
-│   ├── CommandHandler.js     # Command handler
-│   ├── ComponentHandler.js   # Component v2 handler
-│   └── EventHandler.js       # Event handler
+│   ├── CommandHandler.js     # Hybrid command processor
+│   ├── ComponentHandler.js   # Interaction component processor
+│   └── EventHandler.js       # Event listener loader
 ├── modules/
-│   ├── commands/             # Slash & prefix commands
-│   │   └── utility/
-        └── owner/
-│   ├── components/           # Component v2
+│   ├── commands/             # 💬 Command modules
+│   │   ├── utility/
+│   │   └── owner/
+│   ├── components/           # 🔘 Component interactions
 │   │   ├── buttons/
 │   │   ├── selectmenus/
 │   │   └── modals/
-│   └── events/               # Event listeners
+│   └── events/               # 📡 Event listeners
 │       └── client/
 ├── registry/
-│   ├── CommandRegistry.js    # Command storage
-│   └── ComponentRegistry.js  # Component storage
+│   ├── CommandRegistry.js    # In-memory command storage
+│   └── ComponentRegistry.js  # In-memory component storage
 ├── utilities/
-│   ├── Logger.js             # Colorful ASCII logger
-│   └── EmbedBuilder.js       # Embed helper
-├── config.js                 # Bot configuration
-└── deployCommands.js         # Deploy slash commands
-```
+│   ├── Logger.js             # Advanced logging utility
+│   └── EmbedBuilder.js       # Standardized embed generator
+├── config.js                 # Global configuration
+└── deployCommands.js         # Slash command registrar
+````
+
+-----
 
 ## 🚀 Setup
 
-### 1. Install Dependencies
+### 1\. Prerequisites
 
-Dependencies are already installed. If you need to reinstall:
+Ensure you have **Node.js v16.9.0** or higher installed.
+
+### 2\. Install Dependencies
+
+Clone the repository and install the required packages:
 
 ```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
+### 3\. Configure Environment
 
-You'll need to provide:
-- `DISCORD_TOKEN` - Your Discord bot token
-- `CLIENT_ID` - Your bot's client/application ID
-- `PREFIX` - Command prefix (default: !)
-- `OWNER_IDS` - Your Discord user ID (comma-separated for multiple)
-- `TEST_GUILD_ID` - (Optional) Guild ID for testing slash commands
+Create a `.env` file or modify your system environment variables. You will need the following:
 
-### 3. Deploy Slash Commands
+| Variable | Description |
+| :--- | :--- |
+| `DISCORD_TOKEN` | Your Discord Bot Token |
+| `CLIENT_ID` | Your Application ID |
+| `PREFIX` | Default command prefix (e.g., `!`) |
+| `OWNER_IDS` | Comma-separated User IDs for admin access |
+| `TEST_GUILD_ID` | (Optional) Guild ID for instant slash command testing |
+
+### 4\. Deploy Commands
+
+Register your slash commands with the Discord API:
 
 ```bash
 npm run deploy
 ```
 
-### 4. Start the Bot
+### 5\. Launch
+
+Start the bot with sharding enabled:
 
 ```bash
 npm start
 ```
 
+-----
+
 ## 📝 Commands
 
-The bot supports **4 different ways** to execute commands:
+The bot features a **Quad-State Execution Method**, allowing users to interact in whichever way they prefer.
 
-### 1. Slash Commands
-- `/ping` - Check bot latency and shard info
-- `/help` - View all commands with interactive menu
-- `/button` - Test button components
+### 1\. Slash Commands (`/`)
 
-### 2. Prefix Commands
-Use the configured prefix (default `!`):
-- `!ping`
-- `!help`
-- `!button`
+Modern, integrated Discord commands.
 
-### 3. @Mention Commands
-Mention the bot followed by the command:
-- `@Npg ping`
-- `@Npg help`
-- `@Npg button`
+  * `/ping` - Check latency and shard info.
+  * `/help` - View interactive help menu.
 
-### 4. Just @Mention
-Simply mention the bot to see the prefix and usage info:
-- `@Npg` - Shows helpful information about the bot
+### 2\. Prefix Commands (`!`)
 
-## 📖 How to Add Your Own Commands
+Traditional text-based commands.
 
-Want to add your own commands? It's super easy! Follow these examples below.
+  * `!ping`
+  * `!help`
 
-### Creating a Slash Command
+### 3\. Strict Mention Commands (`@Bot cmd`)
 
-1. Create a new file in `modules/commands/` (pick a category like `utility`, `fun`, `moderation`, etc.)
-2. Here's a basic template:
+Trigger a command by tagging the bot.
 
-```js
-const { SlashCommandBuilder } = require('discord.js');
-const embedBuilder = require('../../../utilities/EmbedBuilder');
+  * `@Npg ping`
 
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('hello')
-        .setDescription('Say hello to someone')
-        .addStringOption(option =>
-            option.setName('name')
-                .setDescription('Who to greet')
-                .setRequired(false)),
-    
-    async execute(interaction, client) {
-        const name = interaction.options.getString('name') || interaction.user.username;
-        const embed = embedBuilder.success(`Hello, ${name}! 👋`);
-        await interaction.reply({ embeds: [embed] });
-    }
-};
-```
+### 4\. Passive Mention (`@Bot`)
 
-That's it! Restart the bot and your command will work automatically.
+Simply mentioning the bot will trigger a helpful response showing the current prefix and usage instructions.
 
-### Creating a Prefix Command
+-----
 
-Want to make a command that works with `!command`? Easy!
+## 📖 💻 How to Add Your Own Commands
 
-```js
-module.exports = {
-    name: 'greet',
-    description: 'Greet someone',
-    aliases: ['hello', 'hi'],
-    
-    async execute(message, args, client) {
-        const name = args[0] || message.author.username;
-        await message.reply(`Hello, ${name}! 👋`);
-    }
-};
-```
+We've made development intuitive. Follow these templates to add new features.
 
-Now you can use: `!greet John` or `@Npg greet John`
+### ⚡ Option A: The "Hybrid" Command (Recommended)
 
-### Creating a Command That Works Both Ways (Slash + Prefix)
+Make a command work for **both** Slash and Prefix simultaneously.
 
-The best part? You can make commands work with BOTH slash and prefix!
+**File:** `modules/commands/utility/avatar.js`
 
-```js
+```javascript
 const { SlashCommandBuilder } = require('discord.js');
 
-module.exports {
-    // Slash command config
+module.exports = {
+    // 1. Slash Configuration
     data: new SlashCommandBuilder()
         .setName('avatar')
-        .setDescription('Get user avatar')
+        .setDescription('Get a user avatar')
         .addUserOption(option =>
-            option.setName('user')
-                .setDescription('The user')
-                .setRequired(false)),
-    
-    // Prefix command config
+            option.setName('user').setDescription('Target user').setRequired(false)
+        ),
+
+    // 2. Prefix Configuration
     name: 'avatar',
-    description: 'Get user avatar',
+    description: 'Get a user avatar',
     aliases: ['av', 'pfp'],
-    
-    // Works for BOTH slash and prefix!
+
+    // 3. Unified Execution Logic
     async execute(interactionOrMessage, argsOrClient, clientOrUndefined) {
+        // Detect context
         const isSlash = interactionOrMessage.isChatInputCommand?.();
         const client = isSlash ? argsOrClient : clientOrUndefined;
-        
+
+        // Normalize input
         let user;
         if (isSlash) {
             user = interactionOrMessage.options.getUser('user') || interactionOrMessage.user;
         } else {
             user = interactionOrMessage.mentions.users.first() || interactionOrMessage.author;
         }
-        
+
+        // Send response
         await interactionOrMessage.reply({
             content: `${user.username}'s avatar:`,
             files: [user.displayAvatarURL({ size: 1024 })]
@@ -194,49 +196,36 @@ module.exports {
 };
 ```
 
-Now it works with `/avatar`, `!avatar`, and `@Npg avatar`!
+### 🔘 Adding Interactive Buttons
 
-### Adding Buttons to Your Command
+**1. Create the Command:**
+`modules/commands/fun/vote.js`
 
-```js
+```javascript
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('vote')
-        .setDescription('Create a vote'),
-    
+    data: new SlashCommandBuilder().setName('vote').setDescription('Start a vote'),
     name: 'vote',
-    
-    async execute(interactionOrMessage) {
-        const row = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('vote_yes')
-                    .setLabel('Yes')
-                    .setStyle(ButtonStyle.Success)
-                    .setEmoji('✅'),
-                new ButtonBuilder()
-                    .setCustomId('vote_no')
-                    .setLabel('No')
-                    .setStyle(ButtonStyle.Danger)
-                    .setEmoji('❌')
-            );
 
-        await interactionOrMessage.reply({
-            content: 'Vote now!',
-            components: [row]
-        });
+    async execute(ctx) {
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder().setCustomId('vote_yes').setLabel('Yes').setStyle(ButtonStyle.Success).setEmoji('✅'),
+            new ButtonBuilder().setCustomId('vote_no').setLabel('No').setStyle(ButtonStyle.Danger).setEmoji('❌')
+        );
+
+        await ctx.reply({ content: 'Cast your vote!', components: [row] });
     }
 };
 ```
 
-Then create the button handler in `modules/components/buttons/`:
+**2. Handle the Interaction:**
+`modules/components/buttons/voteHandler.js`
 
-```js
+```javascript
 module.exports = {
-    customId: 'vote',
-    
+    customId: 'vote', // Matches 'vote_yes' and 'vote_no' via partial matching or use specific IDs
+
     async execute(interaction, client) {
         if (interaction.customId === 'vote_yes') {
             await interaction.reply({ content: 'You voted Yes!', ephemeral: true });
@@ -247,62 +236,21 @@ module.exports = {
 };
 ```
 
-### Quick Tips
+-----
 
-- File names don't matter, but use lowercase and meaningful names like `kick.js`, `userinfo.js`
-- Put commands in categories: `utility/`, `moderation/`, `fun/`, etc.
-- The bot auto-loads everything from `modules/commands/`
-- Restart the bot after adding new commands
-- Commands deploy automatically when the bot starts
-- Use `embedBuilder` for nice looking messages (it's imported in examples)
+## 👨‍💻 Authors
 
-## 🎨 Component v2 Handler
+This project is maintained by a dedicated team of developers.
 
-The bot includes a complete component v2 handler supporting:
+| Contributor | Role | GitHub Profile | Discord |
+| :--- | :--- | :--- | :--- |
+| **Npg** | Lead Developer | [github](https://github.com/Itz-Npg) | [discord](https://discord.com/users/1052620216443601076) |
+| **SoulCosmic** | Core Developer | [github](https://github.com/SoulDevs) | [discord](https://discord.com/users/543016540790849551) |
+| **Sandeep Op** | Developer | [github](https://github.com/sandeep-op9) | [discord](https://discord.com/users/975254584224268298) | 
+| **Vansh** | Developer | [github](https://github.com/vanshnoteral) | [discord](https://discord.com/users/1257022283373875282) |
 
-### Buttons
-Located in `modules/components/buttons/`
-- Custom ID pattern matching
-- Interactive button responses
-
-### Select Menus
-Located in `modules/components/selectmenus/`
-- String select menus
-- Dynamic menu handling
-
-### Modals
-Located in `modules/components/modals/`
-- Form submissions
-- User input handling
-
-## 🔧 Configuration
-
-Edit `config.js` to customize:
-- Sharding settings
-- Bot presence
-- Default colors
-- Owner permissions
-
-## 📊 Sharding
-
-The bot uses **discord-hybrid-sharding** and automatically:
-- Calculates optimal shard count
-- Distributes shards across clusters
-- Displays cluster/shard info in logs
-- Handles shard lifecycle events
-
-## 🎨 Logger Features
-
-- Colorful ASCII banner with bot branding
-- Shard and cluster status tracking
-- Command and component usage logs
-- Error handling with stack traces
-- Different log levels (info, success, warn, error, debug)
-
-## 👨‍💻 Author
-
-**Npg**
+-----
 
 ## 📄 License
 
-MIT License
+This project is licensed under the **MIT License**.
